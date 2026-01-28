@@ -13,7 +13,7 @@ export function Header({
   language,
   toggleLanguage,
 }: HeaderProps) {
-  const [modeAnimation, setModeAnimation] = useState(false);
+  const [modeAnimation] = useState(false);
 
   return (
     <header className="top-bar">
