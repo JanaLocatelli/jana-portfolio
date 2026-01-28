@@ -1,13 +1,10 @@
-import { use, useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
 import { translations } from "./i18n";
 import { Header } from "./componets/Header";
 import "./App.css";
 import { getDarkMode, saveDarkMode } from "./hooks/userPreferences";
 
 function App() {
-  const [count, setCount] = useState(0);
   const [darkMode, setDarkMode] = useState<boolean>(() => getDarkMode());
   const [language, setLanguage] = useState<"en" | "pt">("en");
 
@@ -29,16 +26,41 @@ function App() {
     saveDarkMode(darkMode);
   }, [darkMode]);
 
+  const toggleDarkModeWithAnimation = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ) => {
+    const overlay = document.querySelector(
+      ".theme-transition",
+    ) as HTMLElement | null;
+
+    if (!overlay) {
+      setDarkMode((prev) => !prev);
+      return;
+    }
+
+    overlay.style.setProperty("--x", `${e.clientX}px`);
+    overlay.style.setProperty("--y", `${e.clientY}px`);
+
+    overlay.classList.add("active");
+
+    setTimeout(() => {
+      setDarkMode((prev) => !prev);
+      overlay.classList.remove("active");
+    }, 350);
+  };
+
   return (
-    <div className={darkMode ? "app dark" : "app light"}>
-      <>
+    <>
+      <div className="theme-transition" />
+
+      <div className={darkMode ? "app dark" : "app light"}>
         <Header
           toggleLanguage={() =>
             setLanguage((lang) => (lang === "en" ? "pt" : "en"))
           }
           language={language}
           darkMode={darkMode}
-          toggleDarkMode={() => setDarkMode(!darkMode)}
+          toggleDarkMode={toggleDarkModeWithAnimation}
         />
         <div className="app">
           <header className="header">
@@ -91,8 +113,8 @@ function App() {
             <p>© {new Date().getFullYear()} Janaina Ribeiro-Locatelli</p>
           </footer>
         </div>
-      </>
-    </div>
+      </div>
+    </>
   );
 }
 

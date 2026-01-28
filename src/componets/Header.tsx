@@ -2,7 +2,7 @@ import { useState } from "react";
 
 type HeaderProps = {
   darkMode: boolean;
-  toggleDarkMode: () => void;
+  toggleDarkMode: (e: React.MouseEvent<HTMLButtonElement>) => void;
   language: "en" | "pt";
   toggleLanguage: () => void;
 };
@@ -21,11 +21,12 @@ export function Header({
 
       <div className="right">
         <button
-          onClick={() => {
-            toggleDarkMode();
-            setModeAnimation(true);
-            setTimeout(() => setModeAnimation(false), 300);
-          }}
+          // onClick={() => {
+          //   toggleDarkMode();
+          //   setModeAnimation(true);
+          //   setTimeout(() => setModeAnimation(false), 300);
+          // }}
+          onClick={toggleDarkMode}
           className="icon-btn"
         >
           <div className={`${modeAnimation ? "mode-icon" : ""}`}>
